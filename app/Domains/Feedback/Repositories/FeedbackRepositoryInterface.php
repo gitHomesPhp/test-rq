@@ -6,5 +6,5 @@ namespace App\Domains\Feedback\Repositories;
 
 interface FeedbackRepositoryInterface
 {
-    public function save();
+    public function find();
 }

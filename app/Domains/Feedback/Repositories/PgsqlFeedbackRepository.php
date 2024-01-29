@@ -8,8 +8,7 @@ use App\Domains\Feedback\Repositories\FeedbackRepositoryInterface;
 
 final class PgsqlFeedbackRepository implements FeedbackRepositoryInterface
 {
-
-    public function save()
+    public function find()
     {
 
     }
