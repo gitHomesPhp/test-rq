@@ -12,10 +12,11 @@ use App\Domains\Feedback\ValueObjects\Name;
 use App\Domains\Feedback\ValueObjects\Phone;
 use App\Domains\Feedback\ValueObjects\Text;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 
 class SaveFeedbackController extends Controller
 {
-    public function __invoke(SaveFeedbackRequest $request, EntityManager $em, EntityFactory $entityFactory)
+    public function __invoke(SaveFeedbackRequest $request, EntityManager $em, EntityFactory $entityFactory): JsonResponse
     {
         $name = Name::from($request->name);
         $phone = Phone::from($request->phone);
@@ -30,6 +31,6 @@ class SaveFeedbackController extends Controller
 
         $em->flush($feedback);
 
-        return $request->all();
+        return new JsonResponse($request->all());
     }
 }
