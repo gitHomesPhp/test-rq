@@ -6,6 +6,12 @@ const phone = ref('')
 const name = ref('')
 const text = ref('')
 
+const errMessages = ref( {
+    phone: [],
+    name: [],
+    text: [],
+})
+
 const send = async () => {
     const body = {
         phone: phone.value,
@@ -13,31 +19,43 @@ const send = async () => {
         text: text.value,
     }
 
-    console.log(body)
-
     try {
         const resp = await axios({
             method: 'post',
             url: '/api/feedback',
             data: body
         })
-        console.log(resp.data)
 
     } catch (e) {
-        console.log(e.response.data.errors)
+        errMessages.value = {
+            phone: [],
+            name: [],
+            text: [],
+        }
+        const errors = e.response.data.errors;
+
+        Object.keys(errors).forEach(function (key) {
+            errMessages.value[key] = errors[key]
+        })
     }
-
-
-
 }
 </script>
 
 <template>
     <form @submit.prevent="send" class="form">
         <input type="text" v-model="name" placeholder="Имя" class="form__field">
+        <div v-if="errMessages.name.length > 0" v-for="error in errMessages.name" class="danger">
+            {{error}}
+        </div>
         <input type="tel" v-model="phone" placeholder="Телефон" class="form__field">
+        <div v-if="errMessages.phone.length > 0" v-for="error in errMessages.phone" class="danger">
+            {{error}}
+        </div>
         <textarea v-model="text" placeholder="Текст" class="form__field">
-            </textarea>
+        </textarea>
+        <div v-if="errMessages.text.length > 0" v-for="error in errMessages.text" class="danger">
+            {{error}}
+        </div>
         <button type="submit" class="form__field">Отправить</button>
     </form>
     <div>{{name}}</div>
